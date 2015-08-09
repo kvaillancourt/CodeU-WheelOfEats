@@ -1,5 +1,6 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,7 +37,7 @@ import java.util.List;
 public class MainActivityFragment extends Fragment { //implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private ArrayAdapter<String> mResturantAdapter;
-  //  private GoogleApiClient mGoogleApiClient;
+    // private GoogleApiClient mGoogleApiClient;
 
     public MainActivityFragment() {
     }
@@ -44,7 +46,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        //buildGoogleApiClient();
+        //      buildGoogleApiClient();
     }
 
 //    protected synchronized void buildGoogleApiClient() {
@@ -66,10 +68,11 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
         if (id == R.id.action_refresh) {
             FetchResturantTask resturantTask = new FetchResturantTask();
             resturantTask.execute("lat/long string to change for later");
-            return  true;
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,16 +107,38 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                 R.id.list_view_resturant
         );
         listView.setAdapter(mResturantAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                displayMap();
+//                        String forecast = mResturantAdapter.getItem(position);
+//                        Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return rootView;
 
     }
 
-    public class FetchResturantTask extends AsyncTask<String, Void, String[]> {
+    public void displayMap() {//(Resturant resturant) {
+//        String location = latitutde + longitude + "(" + name + ")";
+//        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+//                                .appendQueryParameter("q", location)
+//                                .build();
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=latitude,longitude(label)");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+    }
+
+    public class FetchResturantTask extends AsyncTask<String, Void, Resturant[]> {
         private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
 
         @Override
-        protected String[] doInBackground(String... params) {
+        protected Resturant[] doInBackground(String... params) {
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -218,7 +243,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
         }
 
 
-        //TODO: future kara, please change this to reflect the data you are recieving from
+        //Done! future kara, please change this to reflect the data you are recieving from
         // the google places api instead of the weateher api...
         // Lesson 2: Json parsing
 
@@ -229,7 +254,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private String[] getResturantDataFromJson(String placesJsonStr, int numRestuants)
+        private Resturant[] getResturantDataFromJson(String placesJsonStr, int numRestuants)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -250,13 +275,13 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
             // now we work exclusively in UTC
 //            dayTime = new Time();
 
-            String[] resultStrs = new String[numRestuants];
+            Resturant[] resultStrs = new Resturant[numRestuants];
             for (int i = 0; i < placeArray.length(); i++) {
                 String name;
                 String id;
 
                 // Get the JSON object representing the restuant
-                JSONObject resturant = placeArray.getJSONObject(i);
+                JSONObject resturantJSON = placeArray.getJSONObject(i);
 
 //                // The date/time is returned as a long.  We need to convert that
 //                // into something human-readable, since most people won't read "1400356800" as
@@ -266,13 +291,13 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 //                dateTime = dayTime.setJulianDay(julianStartDay + i);
 //                String day = getReadableDateString(dateTime);
 
-                name = resturant.getString(OWM_NAME);
-                id = resturant.getString(OWM_ID);
-
-                resultStrs[i] = name; //+ "-" + id;
+                name = resturantJSON.getString(OWM_NAME);
+                id = resturantJSON.getString(OWM_ID);
+                Resturant resturant = new Resturant(name, id);
+                resultStrs[i] = resturant; //+ "-" + id;
             }
 
-            for (String s : resultStrs) {
+            for (Resturant s : resultStrs) {
                 Log.v(LOG_TAG, "Resturant entry: " + s);
             }
             return resultStrs;
@@ -280,12 +305,12 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
         }
 
         @Override
-        protected void onPostExecute(String[] result) {
+        protected void onPostExecute(Resturant[] result) {
             if (result != null) {
                 mResturantAdapter.clear();
-                for (String resturantStr : result) {
+                for (Resturant resturantStr : result) {
                     if (resturantStr != null) {
-                        mResturantAdapter.add(resturantStr);
+                        mResturantAdapter.add(resturantStr.name);
                     }
                 }
             }
