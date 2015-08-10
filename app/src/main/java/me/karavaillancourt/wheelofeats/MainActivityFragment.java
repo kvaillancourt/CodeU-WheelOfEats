@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,7 +103,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                 getActivity(),
                 R.layout.list_item_resturants,
                 R.id.list_item_resturant_textview,
-                listResturants);
+                new ArrayList<String>());
         ListView listView = (ListView) rootView.findViewById(
                 R.id.list_view_resturant
         );
@@ -111,9 +112,9 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                displayMap();
-//                        String forecast = mResturantAdapter.getItem(position);
-//                        Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+                //               displayMap();
+                String forecast = mResturantAdapter.getItem(position);
+                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -121,13 +122,13 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
     }
 
-    public void displayMap() {//(Resturant resturant) {
-//        String location = latitutde + longitude + "(" + name + ")";
-//        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-//                                .appendQueryParameter("q", location)
-//                                .build();
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=latitude,longitude(label)");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+    public void displayMap(Resturant resturant) {
+        String location = resturant.getLatitude() + "," + resturant.getLongitude() + "(" + resturant.getName() + ")";
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                .appendQueryParameter("q", location)
+                .build();
+        //Uri geoLocation = Uri.parse("geo:0,0?q=latitude,longitude(label)");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoLocation);
         mapIntent.setPackage("com.google.android.apps.maps");
         if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(mapIntent);
@@ -162,7 +163,6 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                 final String RADIUS_PARAM = "radius";
                 final String TYPES_PARAM = "types";
                 final String API_KEY_PARAM = "key";
-                //String startingurl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&key=";
 
                 Uri builtUri = Uri.parse(PLACES_BASE_URL).buildUpon()
                         .appendQueryParameter(LOCATION_PARAM, location)
@@ -223,8 +223,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                 }
             }
             try {
-                //todo: SUpER JAnKy!!! MUST FiX
-                return getResturantDataFromJson(resturantJsonStr, radius);
+                return getResturantDataFromJson(resturantJsonStr);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -254,51 +253,58 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private Resturant[] getResturantDataFromJson(String placesJsonStr, int numRestuants)
+        private Resturant[] getResturantDataFromJson(String placesJsonStr)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
             final String OWM_RESULTS = "results";
             final String OWM_NAME = "name";
             final String OWM_ID = "id";
+            final String OWM_lat = "lat";
+            final String OWM_long = "lng";
+            final String OWM_open_now = "open_now";
+            final String OWM_opening_hours = "opening_hours";
+            final String OWM_geometry = "geometry";
+            final String OWM_location = "location";
 
             JSONObject placesJson = new JSONObject(placesJsonStr);
             JSONArray placeArray = placesJson.getJSONArray(OWM_RESULTS);
 
 
-//            Time dayTime = new Time();
-//            dayTime.setToNow();
-
-            // we start at the day returned by local time. Otherwise this is a mess.
-//            int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
-
-            // now we work exclusively in UTC
-//            dayTime = new Time();
-
-            Resturant[] resultStrs = new Resturant[numRestuants];
+            Resturant[] resultStrs = new Resturant[placeArray.length()];
             for (int i = 0; i < placeArray.length(); i++) {
                 String name;
                 String id;
-
+                Double latitude;
+                Double longitude;
+                boolean open;
                 // Get the JSON object representing the restuant
                 JSONObject resturantJSON = placeArray.getJSONObject(i);
 
-//                // The date/time is returned as a long.  We need to convert that
-//                // into something human-readable, since most people won't read "1400356800" as
-//                // "this saturday".
-//                long dateTime;
-//                // Cheating to convert this to UTC time, which is what we want anyhow
-//                dateTime = dayTime.setJulianDay(julianStartDay + i);
-//                String day = getReadableDateString(dateTime);
-
                 name = resturantJSON.getString(OWM_NAME);
                 id = resturantJSON.getString(OWM_ID);
-                Resturant resturant = new Resturant(name, id);
+
+
+                JSONObject geometry = resturantJSON.getJSONObject(OWM_geometry);
+                JSONObject location = geometry.getJSONObject(OWM_location);
+                latitude = location.getDouble(OWM_lat);
+                longitude = location.getDouble(OWM_long);
+
+                //TODO: so the opening_hours sometimes isn't there.. what to do??
+
+                //JSONObject opening_hours = resturantJSON.getJSONObject(OWM_opening_hours);
+                open = true; //opening_hours.getBoolean(OWM_open_now);
+
+                Resturant resturant = new Resturant(name, id, latitude, longitude, open);
+
                 resultStrs[i] = resturant; //+ "-" + id;
+
             }
 
-            for (Resturant s : resultStrs) {
-                Log.v(LOG_TAG, "Resturant entry: " + s);
+            for (Resturant resturant : resultStrs) {
+                Log.v(LOG_TAG, resturant.getName() + " " + resturant.getId() + " "
+                        + resturant.getLatitude() + " " + resturant.getLongitude() + " "
+                        + resturant.getOpen());
             }
             return resultStrs;
 
@@ -310,7 +316,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                 mResturantAdapter.clear();
                 for (Resturant resturantStr : result) {
                     if (resturantStr != null) {
-                        mResturantAdapter.add(resturantStr.name);
+                        mResturantAdapter.add(resturantStr.getName());
                     }
                 }
             }
