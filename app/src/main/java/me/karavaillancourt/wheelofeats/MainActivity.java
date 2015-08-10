@@ -29,19 +29,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
 
-//    public void displayMap() {
-//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
-//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//        if (mapIntent.resolveActivity(getPackageManager()) != null) {
-//            startActivity(mapIntent);
-//        }
-//    }
+
 }

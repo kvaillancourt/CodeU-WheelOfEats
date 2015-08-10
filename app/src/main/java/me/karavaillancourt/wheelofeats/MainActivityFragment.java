@@ -1,9 +1,12 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,14 +69,27 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            FetchResturantTask resturantTask = new FetchResturantTask();
-            resturantTask.execute("lat/long string to change for later");
-            return true;
-        }
+//        if (id == R.id.action_refresh) {
+//            FetchResturantTask resturantTask = new FetchResturantTask();
+//            resturantTask.execute("lat/long string to change for later");
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateWeather() {
+        FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        resturantTask.execute(location);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -138,6 +154,13 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     public class FetchResturantTask extends AsyncTask<String, Void, Resturant[]> {
         private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
 
+        private ArrayAdapter<String> mResturantAdapter;
+        private final Context mContext;
+
+        public FetchResturantTask(Context context, ArrayAdapter<String> forecastAdapter) {
+            mContext = context;
+            mResturantAdapter = forecastAdapter;
+        }
         @Override
         protected Resturant[] doInBackground(String... params) {
 
