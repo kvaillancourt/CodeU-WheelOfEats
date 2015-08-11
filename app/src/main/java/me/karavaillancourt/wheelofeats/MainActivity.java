@@ -76,11 +76,9 @@ public class MainActivity extends AppCompatActivity implements
 
 
     public void launchFetchResturantTask() {
-        //todo make sure this doens't break anything
         Context context = getApplicationContext();
         EditText radiusText = (EditText) findViewById(R.id.radius_distance);
         String radius = radiusText.getText().toString();
-        //new FetchResturantTask()
 
         if (radius.length() > 0 && isNumeric(radius)) {
             FetchResturantTask fetchResturantTask = new FetchResturantTask(this);

@@ -79,13 +79,6 @@ public class DetailsFragment extends Fragment {
 
         });
 
-        view.findViewById(R.id.start_over_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void openRestaurantLocationInMaps(Resturant resturant) {
