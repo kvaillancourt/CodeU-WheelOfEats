@@ -192,8 +192,6 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
 
     }
 
-
-    //todo: we dont need this resturantadapter anymore because we don't care about the list view
     @Override
     protected void onPostExecute(Void V) {
         mActivity.addRestaurantDataToFragment();

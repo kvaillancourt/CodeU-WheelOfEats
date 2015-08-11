@@ -12,6 +12,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -23,9 +31,16 @@ public class DetailsFragment extends Fragment {
     private LinearLayout resultsView;
     public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
     private static final long ANIMATION_DELAY = 5000;
+    private MainActivity mainActivity;
+
 
 
     public DetailsFragment() {
+        //mainActivity = activity;
+    }
+
+    public void setMainActivity(MainActivity activity){
+        mainActivity = activity;
     }
 
     @Override
@@ -135,5 +150,19 @@ public class DetailsFragment extends Fragment {
 
     public Resturant getRestaurant() {
         return restaurant;
+    }
+
+    public void save(View view) throws FileNotFoundException, UnsupportedEncodingException {
+        Resturant current = getRestaurant();
+        BufferedWriter infoWriter = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(getActivity().getFilesDir().toString() + "/saved_restaurants.txt"), "UTF-8"));
+        try {
+            infoWriter.write(current.getName() + "\n");
+            // infoWriter.write(current ADDRESS
+
+            infoWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
