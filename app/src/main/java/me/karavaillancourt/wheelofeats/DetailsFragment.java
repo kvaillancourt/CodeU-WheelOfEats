@@ -3,12 +3,15 @@ package me.karavaillancourt.wheelofeats;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -19,8 +22,11 @@ import java.util.Locale;
 public class DetailsFragment extends Fragment {
 
     private View view;
+    private GIFView wheelGifContainer;
+    private LinearLayout resultsView;
     private Resturant Restaurant;
     public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
+    private static final long ANIMATION_DELAY = 5000;
 
 
     public DetailsFragment() {
@@ -30,15 +36,17 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_details, container, false);
+        resultsView = (LinearLayout) view.findViewById(R.id.results_view);
+        wheelGifContainer = (GIFView) view.findViewById(R.id.loading_wheel_gif);
         showAnimation();
-        setRestaurantDataInFragment();
         return view;
     }
 
     private void setRestaurantDataInFragment() {
-
        // Resturant resturant = makeSelection();
         //TODO: plug in real data
+        wheelGifContainer.setVisibility(View.GONE);
+        resultsView.setVisibility(View.VISIBLE);
         String mRestaurantName = "Trendy Bistro";
         String mRestaurantAddress = "4131 Brooklyn Ave NE";
         String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
@@ -94,6 +102,13 @@ public class DetailsFragment extends Fragment {
     }
 
     private void showAnimation() {
-
+        resultsView.setVisibility(View.GONE);
+        wheelGifContainer.setVisibility(View.VISIBLE);
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setRestaurantDataInFragment();
+            }
+        }, ANIMATION_DELAY);
     }
 }
