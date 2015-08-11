@@ -1,11 +1,9 @@
 package me.karavaillancourt.wheelofeats;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import org.json.JSONArray;
@@ -18,25 +16,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 
 @TargetApi(4)
 public class FetchResturantTask extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
+    private final ResturantManager mManager;
     private MainActivity mActivity;
     int radius;
-    private Context mContext;
 
-    private ResturantManager mManager;
 
-    public FetchResturantTask(Context context, ResturantManager manager, MainActivity activity) {
+    public FetchResturantTask(MainActivity activity) {
 
         this.mActivity = activity;
-        this.mContext = context;
-        mManager = manager;
+        mManager = activity.getManager();
         EditText radiusText = (EditText) mActivity.findViewById(R.id.radius_distance);
         String radiusMiles = radiusText.getText().toString();
-        Integer radiusMilesInt = Integer.parseInt(radiusMiles);
+        int radiusMilesInt = Integer.parseInt(radiusMiles);
         radius = radiusMilesInt * 1609;
 
     }
@@ -152,10 +147,9 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
         final String OWM_ID = "id";
         final String OWM_lat = "lat";
         final String OWM_long = "lng";
-        final String OWM_open_now = "open_now";
-        final String OWM_opening_hours = "opening_hours";
         final String OWM_geometry = "geometry";
         final String OWM_location = "location";
+        final String OWM_icon = "icon";
 
         JSONObject placesJson = new JSONObject(placesJsonStr);
         JSONArray placeArray = placesJson.getJSONArray(OWM_RESULTS);
@@ -167,12 +161,13 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
             String id;
             Double latitude;
             Double longitude;
-            boolean open;
+            String icon;
             // Get the JSON object representing the restuant
             JSONObject resturantJSON = placeArray.getJSONObject(i);
 
             name = resturantJSON.getString(OWM_NAME);
             id = resturantJSON.getString(OWM_ID);
+            icon = resturantJSON.getString(OWM_icon);
 
 
             JSONObject geometry = resturantJSON.getJSONObject(OWM_geometry);
@@ -180,24 +175,18 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
             latitude = location.getDouble(OWM_lat);
             longitude = location.getDouble(OWM_long);
 
-            //TODO: so the opening_hours sometimes isn't there.. what to do??
-
-            //JSONObject opening_hours = resturantJSON.getJSONObject(OWM_opening_hours);
-            open = true; //opening_hours.getBoolean(OWM_open_now);
-
-            Resturant resturant = new Resturant(name, id, latitude, longitude, open);
+            Resturant resturant = new Resturant(name, id, latitude, longitude, icon);
 
             resultStrs[i] = resturant; //+ "-" + id;
 
             mManager.setMasterList(resultStrs);
-            //masterList = resultStrs;
 
         }
 
         for (Resturant resturant : resultStrs) {
             Log.v(LOG_TAG, resturant.getName() + " " + resturant.getId() + " "
                     + resturant.getLatitude() + " " + resturant.getLongitude() + " "
-                    + resturant.getOpen());
+                    + resturant.getIcon());
         }
         mManager.setMasterList(resultStrs);
 
@@ -207,15 +196,7 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
     //todo: we dont need this resturantadapter anymore because we don't care about the list view
     @Override
     protected void onPostExecute(Void V) {
-        //todo: kara figure out how to make this view thing dipslay so i can debug stuff
-        //     setRestaurantDataInFragment();
-//            if (result != null) {
-//                mResturantAdapter.clear();
-//                for (Resturant resturantStr : result) {
-//                    if (resturantStr != null) {
-//                        mResturantAdapter.add(resturantStr.getName());
-//                    }
-//                }
-//            }
+
+        // mActivity.launchDetailFragment();
     }
 }

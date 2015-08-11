@@ -1,16 +1,12 @@
 package me.karavaillancourt.wheelofeats;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,11 +18,13 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     String LOG_TAG = MainActivity.class.getSimpleName();
+    private ResturantManager mManager;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     public String mLatitudeText = "32.873864";
     public String mLongitudeText = "-117.217262";
+    private ResturantManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction().add(R.id.activity_main, new MainActivityFragment(), MainActivityFragment.MAIN_FRAGMENT_TAG).commit();
         buildGoogleApiClient();
         mGoogleApiClient.connect();
+        manager = new ResturantManager();
+
     }
 
     @Override
@@ -74,9 +74,30 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+
+    public void launchFetchResturantTask() {
+        //todo make sure this doens't break anything
+        Context context = getApplicationContext();
+        EditText radiusText = (EditText) findViewById(R.id.radius_distance);
+        String radius = radiusText.getText().toString();
+        //new FetchResturantTask()
+
+        if (radius.length() > 0 && isNumeric(radius)) {
+            FetchResturantTask fetchResturantTask = new FetchResturantTask(this);
+            fetchResturantTask.execute();
+        } else {
+            CharSequence text = "Radius input is invalid. Please try again.";
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
     public void launchDetailFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).commit();
 
+        //call wheel gif here!!
+        launchFetchResturantTask();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -110,21 +131,8 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    @TargetApi(4)
-    public void submitRequest(View view){
-        //Intent intent = new Intent(this, DetailsActivity.class);
 
-        Context context = getApplicationContext();
-        ResturantManager manager = new ResturantManager();
-        EditText radiusText = (EditText) findViewById(R.id.radius_distance);
-        String radius = radiusText.getText().toString();
-
-        if (radius.length() > 0 && isNumeric(radius)){
-            FetchResturantTask fetchResturantTask = new FetchResturantTask(context, manager, this);
-            fetchResturantTask.execute();
-        }else{
-            CharSequence text = "Radius input is invalid. Please try again.";
-            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-        }
+    public ResturantManager getManager() {
+        return manager;
     }
 }
