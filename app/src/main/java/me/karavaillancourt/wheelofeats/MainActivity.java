@@ -92,10 +92,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void launchDetailFragment() {
+        launchFetchResturantTask();
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).commit();
-
-        //call wheel gif here!!
-        //launchFetchResturantTask();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -129,6 +127,13 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
+    public void addRestaurantDataToFragment() {
+        DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager()
+                .findFragmentByTag(DetailsFragment.DETAILS_FRAGMENT_TAG);
+        if (detailsFragment != null) {
+            detailsFragment.setRestaurantDataInFragment(getManager().selectRandom());
+        }
+    }
 
     public ResturantManager getManager() {
         return manager;
