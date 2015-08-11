@@ -94,4 +94,20 @@ public class MainActivity extends AppCompatActivity implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
+
+
+    public void submitRequest(View view){
+        //Intent intent = new Intent(this, DetailsActivity.class);
+
+        Context mContext;
+        //private ResturantManager mManager;
+        EditText radiusText = (EditText) findViewById(R.id.radius_distance);
+
+        String radius = radiusText.getText().toString();
+        //FetchResturantTask fetchResturantTask = new FetchResturantTask(mContext, mManager, this);
+
+        //intent.putExtra("radiusKey", radius);
+
+        //startActivity(intent);
+    }
 }
