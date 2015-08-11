@@ -16,12 +16,14 @@ import java.util.Locale;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailsActivityFragment extends Fragment {
+public class DetailsFragment extends Fragment {
 
     private View view;
     private Resturant Restaurant;
+    public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
 
-    public DetailsActivityFragment() {
+
+    public DetailsFragment() {
     }
 
     @Override

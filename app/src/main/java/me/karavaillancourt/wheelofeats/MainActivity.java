@@ -1,5 +1,6 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportFragmentManager().beginTransaction().add(R.id.activity_main, new MainActivityFragment(), MainActivityFragment.MAIN_FRAGMENT_TAG).commit();
         buildGoogleApiClient();
         mGoogleApiClient.connect();
     }
@@ -36,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        launchResultsFragment();
         return true;
     }
 
@@ -70,10 +72,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    public void launchResultsFragment() {
-        //TODO need to find a better way to transition between activity main and results fragment...maybe put stuff in activity_main in a fragment?
-        FragmentResults resultsFragment = new FragmentResults();
-        getSupportFragmentManager().beginTransaction().add(R.id.activity_main, resultsFragment, FragmentResults.RESULTS_FRAGMENT_TAG).commit();
+    public void launchDetailFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).commit();
+
     }
 
     protected synchronized void buildGoogleApiClient() {
