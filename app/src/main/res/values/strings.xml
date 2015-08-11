@@ -10,7 +10,7 @@
     <string name="results_distance_to_restaurant">%1$d miles away</string>
     <string name="spin_again_btn_text">Spin Again</string>
     <string name="start_over_btn_text">Start Over</string>
-    <string name="main_description">Welcome to Wheel of Eats! Please enter the furthest radius distance you're willing to travel to find your perfect food spot.</string>
+    <string name="main_description">Welcome to Wheel of Eats! Please enter the furthest radius distance you\'re willing to travel to find your perfect food spot.</string>
     <string name="radius_distance">Distance (Miles)</string>
     <string name="submit">Submit</string>
     <string name="no_maps_app_error_dialog_title">Error opening map</string>
@@ -18,4 +18,5 @@
     <string name="ok">OK</string>
     <string name="title_activity_details">DetailsActivity</string>
     <string name="main_image_caption">Main logo</string>
+    <string name="no_restaurants_found">No restaurants were found.</string>
 </resources>
