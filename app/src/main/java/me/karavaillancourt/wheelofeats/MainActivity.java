@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).commit();
 
         //call wheel gif here!!
-        launchFetchResturantTask();
+        //launchFetchResturantTask();
     }
 
     protected synchronized void buildGoogleApiClient() {

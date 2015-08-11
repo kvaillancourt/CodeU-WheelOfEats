@@ -67,7 +67,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
         view.findViewById(R.id.submit_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).launchDetailFragment();
+                ((MainActivity) getActivity()).launchFetchResturantTask();
             }
         });
 

@@ -197,6 +197,6 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPostExecute(Void V) {
 
-        // mActivity.launchDetailFragment();
+        mActivity.launchDetailFragment();
     }
 }
