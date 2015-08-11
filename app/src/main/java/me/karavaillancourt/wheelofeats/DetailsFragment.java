@@ -23,6 +23,7 @@ public class DetailsFragment extends Fragment {
     private LinearLayout resultsView;
     public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
     private static final long ANIMATION_DELAY = 5000;
+    public boolean doneWithAnimation = true;
 
 
     public DetailsFragment() {
@@ -38,17 +39,13 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
-    public void setRestaurantDataInFragment(Resturant restaurant) {
-        this.restaurant = restaurant;
+    public void setRestaurantDataInFragment() {
         wheelGifContainer.setVisibility(View.GONE);
         resultsView.setVisibility(View.VISIBLE);
         String mRestaurantName;
         if (restaurant != null) {
             view.findViewById(R.id.open_in_maps_btn).setVisibility(View.VISIBLE);
             view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.VISIBLE);
-            //String mRestaurantName = "Trendy Bistro";
-            //String mRestaurantAddress = "4131 Brooklyn Ave NE";
-            //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
             mRestaurantName = restaurant.getName();
             //String mRestaurantAddress = restaurant.getAddress();
             //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
@@ -84,7 +81,7 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO plug in restaurant latitude and longitude
-                openRestaurantLocationInMaps(restaurant);
+                openRestaurantLocationInMaps();
             }
 
         });
@@ -120,13 +117,21 @@ public class DetailsFragment extends Fragment {
     }
 
     private void showAnimation() {
+        doneWithAnimation = false;
         resultsView.setVisibility(View.GONE);
         wheelGifContainer.setVisibility(View.VISIBLE);
         view.postDelayed(new Runnable() {
             @Override
             public void run() {
-                setRestaurantDataInFragment(null);
+                setRestaurantDataInFragment();
             }
         }, ANIMATION_DELAY);
+    }
+
+    public void setRestaurant(Resturant restaurant) {
+        this.restaurant = restaurant;
+        if (view.findViewById(R.id.results_view).getVisibility() == View.VISIBLE) {
+            setRestaurantDataInFragment();
+        }
     }
 }

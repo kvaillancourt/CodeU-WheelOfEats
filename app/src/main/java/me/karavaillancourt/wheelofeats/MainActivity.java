@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void launchDetailFragment() {
         launchFetchResturantTask();
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).addToBackStack(MainActivityFragment.MAIN_FRAGMENT_TAG).commit();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements
         DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager()
                 .findFragmentByTag(DetailsFragment.DETAILS_FRAGMENT_TAG);
         if (detailsFragment != null) {
-            detailsFragment.setRestaurantDataInFragment(getManager().selectRandom());
+            detailsFragment.setRestaurant(manager.selectRandom());
         }
     }
 
