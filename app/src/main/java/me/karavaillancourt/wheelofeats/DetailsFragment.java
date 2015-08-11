@@ -114,11 +114,11 @@ public class DetailsFragment extends Fragment {
     private void showAnimation() {
         resultsView.setVisibility(View.GONE);
         wheelGifContainer.setVisibility(View.VISIBLE);
-//        view.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                setRestaurantDataInFragment();
-//            }
-//        }, ANIMATION_DELAY);
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setRestaurantDataInFragment();
+            }
+        }, ANIMATION_DELAY);
     }
 }
