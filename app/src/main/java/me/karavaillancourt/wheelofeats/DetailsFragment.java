@@ -67,10 +67,12 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     showAnimation();
+                    ((MainActivity)getActivity()).addRestaurantDataToFragment();
                 }
             });
         } else {
-            mRestaurantName = getResources().getString(R.string.no_restaurants_found);
+            mRestaurantName = getActivity().getResources().getString(R.string.no_restaurants_found);
+            view.findViewById(R.id.open_in_maps_btn).setVisibility(View.GONE);
         }
         ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
     }
