@@ -134,4 +134,8 @@ public class DetailsFragment extends Fragment {
             setRestaurantDataInFragment();
         }
     }
+
+    public Resturant getRestaurant() {
+        return restaurant;
+    }
 }

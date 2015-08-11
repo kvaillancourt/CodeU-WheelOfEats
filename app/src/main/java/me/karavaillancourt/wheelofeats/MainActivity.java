@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements
     public String mLatitudeText = "32.873864";
     public String mLongitudeText = "-117.217262";
     private ResturantManager manager;
+    private int radius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,31 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentByTag(DetailsFragment.DETAILS_FRAGMENT_TAG);
+        outState.putInt("RADIUS", radius);
+        if (detailsFragment != null) {
+            Resturant selectedRestaurant = detailsFragment.getRestaurant();
+            outState.putString("NAME", selectedRestaurant.getName());
+            outState.putString("ID", selectedRestaurant.getId());
+            outState.putDouble("LATITUDE", selectedRestaurant.getLatitude());
+            outState.putDouble("LONGITUDE", selectedRestaurant.getLongitude());
+            outState.putString("ICON", selectedRestaurant.getIcon());
+        }
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        radius = savedInstanceState.getInt("RADIUS");
+        DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentByTag(DetailsFragment.DETAILS_FRAGMENT_TAG);
+        if (detailsFragment != null) {
+            detailsFragment.setRestaurant(new Resturant(savedInstanceState.getString("NAME"), savedInstanceState.getString("ID"),
+                    savedInstanceState.getDouble("LATITUDE"), savedInstanceState.getDouble("LONGITUDE"), savedInstanceState.getString("ICON")));
+            detailsFragment.setRestaurantDataInFragment();
+        }
+    }
 
     public void launchFetchResturantTask() {
         Context context = getApplicationContext();
@@ -81,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements
         String radius = radiusText.getText().toString();
 
         if (radius.length() > 0 && isNumeric(radius)) {
+            setRadius();
             FetchResturantTask fetchResturantTask = new FetchResturantTask(this);
             fetchResturantTask.execute();
         } else {
@@ -89,6 +116,13 @@ public class MainActivity extends AppCompatActivity implements
         }
 
 
+    }
+
+    private void setRadius() {
+        EditText radiusText = (EditText) findViewById(R.id.radius_distance);
+        String radiusMiles = radiusText.getText().toString();
+        int radiusMilesInt = Integer.parseInt(radiusMiles);
+        radius = radiusMilesInt * 1609;
     }
 
     public void launchDetailFragment() {

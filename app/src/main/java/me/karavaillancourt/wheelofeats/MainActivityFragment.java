@@ -71,25 +71,6 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
             }
         });
 
-//        mResturantAdapter = new ArrayAdapter<String>(
-//                getActivity(),
-//                R.layout.list_item_resturants,
-//                R.id.list_item_resturant_textview,
-//                new ArrayList<String>());
-//        ListView listView = (ListView) rootView.findViewById(
-//                R.id.list_view_resturant
-//        );
-//        listView.setAdapter(mResturantAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                displayMap(manager.select(position));
-//                String forecast = mResturantAdapter.getItem(position);
-//                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
         return view;
 
     }
