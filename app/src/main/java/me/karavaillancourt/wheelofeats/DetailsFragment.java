@@ -23,7 +23,6 @@ public class DetailsFragment extends Fragment {
     private LinearLayout resultsView;
     public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
     private static final long ANIMATION_DELAY = 5000;
-    public boolean doneWithAnimation = true;
 
 
     public DetailsFragment() {
@@ -117,7 +116,6 @@ public class DetailsFragment extends Fragment {
     }
 
     private void showAnimation() {
-        doneWithAnimation = false;
         resultsView.setVisibility(View.GONE);
         wheelGifContainer.setVisibility(View.VISIBLE);
         view.postDelayed(new Runnable() {
