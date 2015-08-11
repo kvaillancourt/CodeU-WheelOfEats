@@ -73,6 +73,7 @@ public class DetailsFragment extends Fragment {
         } else {
             mRestaurantName = getActivity().getResources().getString(R.string.no_restaurants_found);
             view.findViewById(R.id.open_in_maps_btn).setVisibility(View.GONE);
+            view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.GONE);
         }
         ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
     }
