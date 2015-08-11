@@ -51,8 +51,8 @@ public class DetailsFragment extends Fragment {
         //TODO: plug in real data
         wheelGifContainer.setVisibility(View.GONE);
         resultsView.setVisibility(View.VISIBLE);
-        String mRestaurantName = "Trendy Bistro";
-        String mRestaurantAddress = "4131 Brooklyn Ave NE";
+        //String mRestaurantName = "Trendy Bistro";
+        //String mRestaurantAddress = "4131 Brooklyn Ave NE";
         String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
         String mRestaurantName = restaurant.getName();
         //String mRestaurantAddress = restaurant.get
