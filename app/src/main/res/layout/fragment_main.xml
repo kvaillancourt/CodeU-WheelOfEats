@@ -1,17 +1,48 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivityFragment"
-    android:id="@+id/MainFragmentLyout">
+    android:layout_height="match_parent">
 
-    <ListView
+    <LinearLayout
+        android:id="@+id/activity_main_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/list_view_resturant" />
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:windowSoftInputMode="adjustResize"
+        android:orientation="vertical" tools:context=".MainActivity">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/imageViewMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/main"
+            android:contentDescription="@string/main_image_caption"/>
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_description"/>
+
+        <EditText android:id="@+id/postal_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="normal"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:hint="@string/postal_code"/>
+
+        <EditText android:id="@+id/radius_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/radius_distance"/>
+
+        <Button android:id="@+id/submit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            style="?android:attr/buttonStyleSmall"/>
+    </LinearLayout>
+
+</ScrollView>

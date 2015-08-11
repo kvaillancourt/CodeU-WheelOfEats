@@ -40,6 +40,7 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment { //implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private ArrayAdapter<String> mResturantAdapter;
+    public final static String MAIN_FRAGMENT_TAG = "MAIN";
     //    private Resturant[] masterList;
     private ResturantManager manager;
 
@@ -51,7 +52,6 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
 
@@ -86,28 +86,34 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        mResturantAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.list_item_resturants,
-                R.id.list_item_resturant_textview,
-                new ArrayList<String>());
-        ListView listView = (ListView) rootView.findViewById(
-                R.id.list_view_resturant
-        );
-        listView.setAdapter(mResturantAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        view.findViewById(R.id.submit_btn).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                displayMap(manager.select(position));
-                String forecast = mResturantAdapter.getItem(position);
-                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).launchDetailFragment();
             }
         });
 
-        return rootView;
+//        mResturantAdapter = new ArrayAdapter<String>(
+//                getActivity(),
+//                R.layout.list_item_resturants,
+//                R.id.list_item_resturant_textview,
+//                new ArrayList<String>());
+//        ListView listView = (ListView) rootView.findViewById(
+//                R.id.list_view_resturant
+//        );
+//        listView.setAdapter(mResturantAdapter);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                displayMap(manager.select(position));
+//                String forecast = mResturantAdapter.getItem(position);
+//                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        return view;
 
     }
 
