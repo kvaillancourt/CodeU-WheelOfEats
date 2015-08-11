@@ -9,19 +9,16 @@ public class Resturant {
     private final String name;
     private double latitude;
     private double longitude;
-    private boolean open;
+    private String icon;
 
-    public Resturant(String name, String id, double latitude, double longitude, boolean open) {
+    public Resturant(String name, String id, double latitude, double longitude, String icon) {
         this.id = id;
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.open = open;
+        this.icon = icon;
     }
 
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
 
     public double getLatitude() {
         return latitude;
@@ -31,8 +28,8 @@ public class Resturant {
         return longitude;
     }
 
-    public boolean getOpen() {
-        return open;
+    public String getIcon() {
+        return icon;
     }
 
     public String getId() {

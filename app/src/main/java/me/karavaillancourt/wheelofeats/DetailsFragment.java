@@ -12,14 +12,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Locale;
-
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailsFragment extends Fragment {
 
     private View view;
+    private Resturant restaurant;
     private GIFView wheelGifContainer;
     private LinearLayout resultsView;
     private Resturant Restaurant;
@@ -37,26 +36,36 @@ public class DetailsFragment extends Fragment {
         resultsView = (LinearLayout) view.findViewById(R.id.results_view);
         wheelGifContainer = (GIFView) view.findViewById(R.id.loading_wheel_gif);
         showAnimation();
+
+        setRestaurantDataInFragment();
         return view;
     }
 
     public void setRestaurantDataInFragment() {
        // Resturant resturant = makeSelection();
+        MainActivity activity = ((MainActivity) getActivity());
+        ResturantManager manager = activity.getManager();
+        restaurant = manager.selectRandom();
+
+        //Resturant resturant = makeSelection();
         //TODO: plug in real data
         wheelGifContainer.setVisibility(View.GONE);
         resultsView.setVisibility(View.VISIBLE);
-        String mRestaurantName = "Trendy Bistro";
-        String mRestaurantAddress = "4131 Brooklyn Ave NE";
+        //String mRestaurantName = "Trendy Bistro";
+        //String mRestaurantAddress = "4131 Brooklyn Ave NE";
         String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
+        String mRestaurantName = restaurant.getName();
+        //String mRestaurantAddress = restaurant.get
+        //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
         ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
-        ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
-        ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
+        // ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
+        // ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
 
         view.findViewById(R.id.open_in_maps_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO plug in restaurant latitude and longitude
-                openRestaurantLocationInMaps(0, 0);
+                openRestaurantLocationInMaps(restaurant);
             }
 
         });
@@ -79,9 +88,12 @@ public class DetailsFragment extends Fragment {
         });
     }
 
-    private void openRestaurantLocationInMaps(float latitude, float longitude) {
-        String uri = String.format(Locale.ENGLISH, "geo:%f,%f", latitude, longitude);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+    private void openRestaurantLocationInMaps(Resturant resturant) {
+        String location = resturant.getLatitude() + "," + resturant.getLongitude() + "(" + resturant.getName() + ")";
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                .appendQueryParameter("q", location)
+                .build();
+        Intent intent = new Intent(Intent.ACTION_VIEW, geoLocation);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             getActivity().startActivity(intent);
         } else {
