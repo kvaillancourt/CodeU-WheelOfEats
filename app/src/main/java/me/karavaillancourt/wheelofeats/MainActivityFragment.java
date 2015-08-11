@@ -32,8 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,7 +39,7 @@ import java.util.List;
 public class MainActivityFragment extends Fragment { //implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private ArrayAdapter<String> mResturantAdapter;
-    // private GoogleApiClient mGoogleApiClient;
+    private Resturant[] masterList;
 
     public MainActivityFragment() {
     }
@@ -50,16 +48,9 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        //      buildGoogleApiClient();
+
     }
 
-//    protected synchronized void buildGoogleApiClient() {
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .addApi(LocationServices.API)
-//                .build();
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -80,9 +71,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     private void updateWeather() {
         FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String location = prefs.getString(getString(R.string.pref_location_key),
-                getString(R.string.pref_location_default));
-        resturantTask.execute(location);
+        resturantTask.execute();
     }
 
     @Override
@@ -94,26 +83,6 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        String[] fakeResturants = {
-                "Chubby's BBQ",
-                "La Hacienda Mexican Food",
-                "Texas Roadhouse",
-                "Gas Lamp Strip Club",
-                "The Beautiful South",
-                "Golden Banana",
-                "Freaky Fridays",
-                "Logo Lounge",
-                "Pink Tacos",
-                "Blue Waffles",
-                "Spoons",
-                "Cheetaz",
-                "Waffle House",
-                "IHOP",
-                "Cancun"
-        };
-
-        List<String> listResturants = new ArrayList<String>(Arrays.asList(fakeResturants));
 
         mResturantAdapter = new ArrayAdapter<String>(
                 getActivity(),
@@ -128,7 +97,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //               displayMap();
+                displayMap(masterList[position]);
                 String forecast = mResturantAdapter.getItem(position);
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
             }
@@ -151,6 +120,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
         }
     }
 
+
     public class FetchResturantTask extends AsyncTask<String, Void, Resturant[]> {
         private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
 
@@ -171,7 +141,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
             // Will contain the raw JSON response as a string.
             String resturantJsonStr = null;
-            String location = "32.873864,-117.217262";
+            String location = "32.873864,-117.217262";//mLatitudeText + "," + mLongitudeText;
             int radius = 500;
             String types = "restaurant";
             String APIKey = "AIzaSyDMY5l8HtWPiV4CtCmMIZK-NkQDXTa23DY";
@@ -329,6 +299,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                         + resturant.getLatitude() + " " + resturant.getLongitude() + " "
                         + resturant.getOpen());
             }
+            masterList = resultStrs;
             return resultStrs;
 
         }
