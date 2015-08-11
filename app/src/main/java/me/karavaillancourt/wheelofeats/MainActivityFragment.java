@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -306,17 +307,47 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
         }
 
+        private void setRestaurantDataInFragment(View view) {
+
+            // Resturant resturant = makeSelection();
+            //TODO: plug in real data
+            String mRestaurantName = "Trendy Bistro";
+            String mRestaurantAddress = "4131 Brooklyn Ave NE";
+            String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
+            ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
+            ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
+            ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
+
+//        view.findViewById(R.id.open_in_maps_btn).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //TODO plug in restaurant latitude and longitude
+//                openRestaurantLocationInMaps(0, 0);
+//            }
+//        });
+
+            view.findViewById(R.id.spin_again_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO: implement reselecting restaurant
+                    manager.selectRandom();
+                }
+            });
+
+        }
         //todo: we dont need this resturantadapter anymore because we don't care about the list view
-//        @Override
-//        protected void onPostExecute() {
-////            if (result != null) {
-////                mResturantAdapter.clear();
-////                for (Resturant resturantStr : result) {
-////                    if (resturantStr != null) {
-////                        mResturantAdapter.add(resturantStr.getName());
-////                    }
-////                }
-////            }
-//        }
+        //Override
+        protected void onPostExecute() {
+            //todo: kara figure out how to make this view thing dipslay so i can debug stuff
+            //     setRestaurantDataInFragment();
+//            if (result != null) {
+//                mResturantAdapter.clear();
+//                for (Resturant resturantStr : result) {
+//                    if (resturantStr != null) {
+//                        mResturantAdapter.add(resturantStr.getName());
+//                    }
+//                }
+//            }
+        }
     }
 }
