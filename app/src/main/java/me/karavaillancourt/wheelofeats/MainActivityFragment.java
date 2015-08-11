@@ -60,13 +60,14 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-//        if (id == R.id.action_refresh) {
-//            FetchResturantTask resturantTask = new FetchResturantTask();
-//            resturantTask.execute("lat/long string to change for later");
-//            return true;
-//        }
+        if (id == R.id.action_refresh) {
+            FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
+            resturantTask.execute();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void updateWeather() {
         FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
@@ -141,8 +142,9 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
             // Will contain the raw JSON response as a string.
             String resturantJsonStr = null;
-            String location = "32.873864,-117.217262";//mLatitudeText + "," + mLongitudeText;
-            int radius = 500;
+            String location = ((MainActivity) getActivity()).mLatitudeText + "," + ((MainActivity) getActivity()).mLongitudeText; //"32.873864,-117.217262";//
+            Log.v(LOG_TAG, location);
+            int radius = 5000;
             String types = "restaurant";
             String APIKey = "AIzaSyDMY5l8HtWPiV4CtCmMIZK-NkQDXTa23DY";
 

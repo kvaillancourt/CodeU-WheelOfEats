@@ -1,40 +1,37 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.content.Intent;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    String LOG_TAG = MainActivity.class.getSimpleName();
+
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private String mLatitudeText;
-    private String mLongitudeText;
-//    private GoogleApiClient mGoogleApiClient;
+    public String mLatitudeText = "32.873864";
+    public String mLongitudeText = "-117.217262";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buildGoogleApiClient();
+        mGoogleApiClient.connect();
     }
 
-    //    protected synchronized void buildGoogleApiClient() {
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
-//                .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) this)
-//                .addApi(LocationServices.API)
-//                .build();
-//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -50,22 +47,26 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        Log.v(LOG_TAG, "called onConnect");
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
         if (mLastLocation != null) {
             mLatitudeText = (String.valueOf(mLastLocation.getLatitude()));
+            Log.v(LOG_TAG, mLatitudeText);
+
             mLongitudeText = (String.valueOf(mLastLocation.getLongitude()));
+            Log.v(LOG_TAG, mLongitudeText);
         }
     }
 
@@ -79,11 +80,6 @@ public class MainActivity extends AppCompatActivity implements
         return mLatitudeText;
     }
 
-    public String getmLongitudeText() {
-        return mLongitudeText;
-    }
-
-
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -91,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(LocationServices.API)
                 .build();
     }
-
 
     @Override
     public void onConnectionSuspended(int i) {
