@@ -1,10 +1,12 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,22 +20,26 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 
+@TargetApi(4)
 public class FetchResturantTask extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
     private MainActivity mActivity;
-    int radius = 5000;
+    int radius;
+    private Context mContext;
 
-    private ArrayAdapter<String> mResturantAdapter;
-    private final Context mContext;
     private ResturantManager mManager;
 
     public FetchResturantTask(Context context, ResturantManager manager, MainActivity activity) {
-        mContext = context;
-        //mResturantAdapter = forecastAdapter;
-        this.mActivity = activity;
-        mManager = manager;
-    }
 
+        this.mActivity = activity;
+        this.mContext = context;
+        mManager = manager;
+        EditText radiusText = (EditText) mActivity.findViewById(R.id.radius_distance);
+        String radiusMiles = radiusText.getText().toString();
+        Integer radiusMilesInt = Integer.parseInt(radiusMiles);
+        radius = radiusMilesInt * 1609;
+
+    }
 
     @Override
     protected Void doInBackground(String... params) {
@@ -128,16 +134,6 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /* The date/time conversion code is going to be moved outside the asynctask later,
-* so for convenience we're breaking it out into its own method now.
-*/
-    private String getReadableDateString(long time) {
-        // Because the API returns a unix timestamp (measured in seconds),
-        // it must be converted to milliseconds in order to be converted to valid date.
-        SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
-        return shortenedDateFormat.format(time);
     }
 
     /**

@@ -1,5 +1,6 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -93,5 +95,36 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @TargetApi(4)
+    public void submitRequest(View view){
+        //Intent intent = new Intent(this, DetailsActivity.class);
+
+        Context context = getApplicationContext();
+        ResturantManager manager = new ResturantManager();
+        EditText radiusText = (EditText) findViewById(R.id.radius_distance);
+        String radius = radiusText.getText().toString();
+
+        if (radius.length() > 0 && isNumeric(radius)){
+            FetchResturantTask fetchResturantTask = new FetchResturantTask(context, manager, this);
+            fetchResturantTask.execute();
+        }else{
+            CharSequence text = "Radius input is invalid. Please try again.";
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        }
     }
 }
