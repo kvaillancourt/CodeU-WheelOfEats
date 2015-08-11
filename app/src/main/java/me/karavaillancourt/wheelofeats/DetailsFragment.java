@@ -44,6 +44,8 @@ public class DetailsFragment extends Fragment {
         resultsView.setVisibility(View.VISIBLE);
         String mRestaurantName;
         if (restaurant != null) {
+            view.findViewById(R.id.open_in_maps_btn).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.VISIBLE);
             //String mRestaurantName = "Trendy Bistro";
             //String mRestaurantAddress = "4131 Brooklyn Ave NE";
             //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
