@@ -39,9 +39,11 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment { //implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private ArrayAdapter<String> mResturantAdapter;
-    private Resturant[] masterList;
+    //    private Resturant[] masterList;
+    private ResturantManager manager;
 
     public MainActivityFragment() {
+        manager = new ResturantManager();
     }
 
     @Override
@@ -60,18 +62,13 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-//        if (id == R.id.action_refresh) {
-//            FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
-//            resturantTask.execute();
-//            return true;
-//        }
+        if (id == R.id.action_refresh) {
+            FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
+            resturantTask.execute();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
-//todo: in progress. don't judge
-//    public Resturant makeSelection() {
-//        int random = (int) (Math.floor(Math.random() * (masterList.length - 1 + 1)) + 1);
-//
-//    }
 
 
     private void updateResturants() {
@@ -83,7 +80,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     @Override
     public void onStart() {
         super.onStart();
-        //updateResturants();
+        updateResturants();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,7 +100,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                displayMap(masterList[position]);
+                displayMap(manager.select(position));
                 String forecast = mResturantAdapter.getItem(position);
                 Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
             }
@@ -127,7 +124,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     }
 
 
-    public class FetchResturantTask extends AsyncTask<String, Void, Resturant[]> {
+    public class FetchResturantTask extends AsyncTask<String, Void, Void> {
         private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
 
         private ArrayAdapter<String> mResturantAdapter;
@@ -138,7 +135,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
             mResturantAdapter = forecastAdapter;
         }
         @Override
-        protected Resturant[] doInBackground(String... params) {
+        protected Void doInBackground(String... params) {
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -223,7 +220,8 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                 }
             }
             try {
-                return getResturantDataFromJson(resturantJsonStr);
+                getResturantDataFromJson(resturantJsonStr);
+                return null;
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -248,7 +246,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private Resturant[] getResturantDataFromJson(String placesJsonStr)
+        private void getResturantDataFromJson(String placesJsonStr)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -294,6 +292,9 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
                 resultStrs[i] = resturant; //+ "-" + id;
 
+                manager.setMasterList(resultStrs);
+                //masterList = resultStrs;
+
             }
 
             for (Resturant resturant : resultStrs) {
@@ -301,21 +302,21 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
                         + resturant.getLatitude() + " " + resturant.getLongitude() + " "
                         + resturant.getOpen());
             }
-            masterList = resultStrs;
-            return resultStrs;
+            manager.setMasterList(resultStrs);
 
         }
 
-        @Override
-        protected void onPostExecute(Resturant[] result) {
-            if (result != null) {
-                mResturantAdapter.clear();
-                for (Resturant resturantStr : result) {
-                    if (resturantStr != null) {
-                        mResturantAdapter.add(resturantStr.getName());
-                    }
-                }
-            }
-        }
+        //todo: we dont need this resturantadapter anymore because we don't care about the list view
+//        @Override
+//        protected void onPostExecute() {
+////            if (result != null) {
+////                mResturantAdapter.clear();
+////                for (Resturant resturantStr : result) {
+////                    if (resturantStr != null) {
+////                        mResturantAdapter.add(resturantStr.getName());
+////                    }
+////                }
+////            }
+//        }
     }
 }

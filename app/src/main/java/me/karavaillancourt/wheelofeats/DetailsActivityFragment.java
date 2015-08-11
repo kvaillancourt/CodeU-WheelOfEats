@@ -22,6 +22,8 @@ public class DetailsActivityFragment extends Fragment {
     }
 
     private void setRestaurantDataInFragment(View view) {
+
+       // Resturant resturant = makeSelection();
         //TODO: plug in real data
         String mRestaurantName = "Trendy Bistro";
         String mRestaurantAddress = "4131 Brooklyn Ave NE";
