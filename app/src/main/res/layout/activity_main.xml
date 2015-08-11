@@ -35,4 +35,5 @@ android:orientation="vertical" tools:context=".MainActivity">
     android:text="@string/submit"
     style="?android:attr/buttonStyleSmall"
     android:onClick="submitRequest"/>
+
 </LinearLayout>
