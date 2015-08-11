@@ -96,13 +96,10 @@ public class MainActivity extends AppCompatActivity implements
 
     public void submitRequest(View view){
         Intent intent = new Intent(this, DetailsActivity.class);
-        EditText postalText = (EditText) findViewById(R.id.postal_code);
         EditText radiusText = (EditText) findViewById(R.id.radius_distance);
 
-        String postalCode = postalText.getText().toString();
         String radius = radiusText.getText().toString();
 
-        intent.putExtra("postalKey", postalCode);
         intent.putExtra("radiusKey", radius);
 
         startActivity(intent);

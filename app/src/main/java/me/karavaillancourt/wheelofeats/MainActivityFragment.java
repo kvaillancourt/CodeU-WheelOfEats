@@ -1,5 +1,6 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -45,6 +46,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     }
 
     @Override
+    @TargetApi(4)
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
@@ -55,7 +57,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
         return super.onOptionsItemSelected(item);
     }
 
-
+    @TargetApi(4)
     private void updateResturants() {
         FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), manager, (MainActivity) getActivity());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -97,6 +99,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
     }
 
+    @TargetApi(4)
     public void displayMap(Resturant resturant) {
         String location = resturant.getLatitude() + "," + resturant.getLongitude() + "(" + resturant.getName() + ")";
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()

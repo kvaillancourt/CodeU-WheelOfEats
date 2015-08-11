@@ -30,12 +30,12 @@
     android:layout_height="wrap_content"
     android:textStyle="normal"
     android:textSize="18sp"
-    android:layout_centerInParent="true"
     android:hint="@string/postal_code"/>
 
 <EditText android:id="@+id/radius_distance"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:textSize="20sp"
     android:hint="@string/radius_distance"/>
 
 <Button android:layout_width="wrap_content"
