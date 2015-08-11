@@ -3,9 +3,12 @@ package me.karavaillancourt.wheelofeats;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
+import android.widget.EditText;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        launchResultsFragment();
         return true;
     }
 
@@ -65,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    public void launchResultsFragment() {
+        //TODO need to find a better way to transition between activity main and results fragment...maybe put stuff in activity_main in a fragment?
+        FragmentResults resultsFragment = new FragmentResults();
+        getSupportFragmentManager().beginTransaction().add(R.id.activity_main, resultsFragment, FragmentResults.RESULTS_FRAGMENT_TAG).commit();
+    }
+
     public String getmLatitudeText() {
         return mLatitudeText;
     }
@@ -91,5 +101,19 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    public void submitRequest(View view){
+        Intent intent = new Intent(this, FragmentResults.class);
+        EditText postalText = (EditText) findViewById(R.id.postal_code);
+        EditText radiusText = (EditText) findViewById(R.id.radius_distance);
+
+        String postalCode = postalText.getText().toString();
+        String radius = radiusText.getText().toString();
+
+        intent.putExtra("postalKey", postalCode);
+        intent.putExtra("radiusKey", radius);
+
+        startActivity(intent);
     }
 }
