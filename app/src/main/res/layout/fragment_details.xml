@@ -82,13 +82,17 @@
             android:layout_gravity="center" />
     </LinearLayout>
 
-    <me.karavaillancourt.wheelofeats.GIFView
-        android:id="@+id/loading_wheel_gif"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        components:src="@drawable/wheel_animation">
-
-    </me.karavaillancourt.wheelofeats.GIFView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <me.karavaillancourt.wheelofeats.GIFView
+            android:id="@+id/loading_wheel_gif"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            components:src="@drawable/wheel_animation">
+        </me.karavaillancourt.wheelofeats.GIFView>
+    </LinearLayout>
 
     <!--<ProgressBar-->
     <!--android:visibility="visible"-->
