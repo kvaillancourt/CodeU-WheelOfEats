@@ -94,15 +94,4 @@ public class MainActivity extends AppCompatActivity implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
-
-    public void submitRequest(View view){
-        Intent intent = new Intent(this, DetailsActivity.class);
-        EditText radiusText = (EditText) findViewById(R.id.radius_distance);
-
-        String radius = radiusText.getText().toString();
-
-        intent.putExtra("radiusKey", radius);
-
-        startActivity(intent);
-    }
 }
