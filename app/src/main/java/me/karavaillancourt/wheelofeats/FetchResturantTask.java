@@ -25,14 +25,14 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
     private MainActivity mActivity;
     int radius;
+    private Context mContext;
 
-    private final Context mContext;
     private ResturantManager mManager;
 
     public FetchResturantTask(Context context, ResturantManager manager, MainActivity activity) {
 
-        mContext = context;
         this.mActivity = activity;
+        this.mContext = context;
         mManager = manager;
         EditText radiusText = (EditText) mActivity.findViewById(R.id.radius_distance);
         String radiusMiles = radiusText.getText().toString();
@@ -40,7 +40,6 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
         radius = radiusMilesInt * 1609;
 
     }
-
 
     @Override
     protected Void doInBackground(String... params) {
