@@ -15,11 +15,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        android:weightSum="10">
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/restaurant_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_redo_black_24dp"
+            android:scaleType="centerInside"
+            android:layout_weight="8"/>
 
         <TextView
             android:id="@+id/restaurant_name"
+            android:text="NAME"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|bottom"
@@ -28,6 +36,7 @@
             android:layout_weight="6" />
 
         <TextView
+            android:text="123 Address"
             android:id="@+id/restaurant_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,6 +45,7 @@
             android:textSize="@dimen/results_restaurant_address_text_size" />
 
         <TextView
+            android:text="5 miles"
             android:id="@+id/restaurant_distance"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

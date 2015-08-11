@@ -3,12 +3,15 @@ package me.karavaillancourt.wheelofeats;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +22,9 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -61,6 +67,13 @@ public class DetailsFragment extends Fragment {
             view.findViewById(R.id.open_in_maps_btn).setVisibility(View.VISIBLE);
             view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.VISIBLE);
             mRestaurantName = restaurant.getName();
+            try {
+                URL url = new URL(restaurant.getIcon());
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                ((ImageView) view.findViewById(R.id.restaurant_img)).setImageBitmap(bmp);
+            } catch (Exception ex) {
+                view.findViewById(R.id.restaurant_img).setVisibility(View.GONE);
+            }
             //String mRestaurantAddress = restaurant.getAddress();
             //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
             //((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
@@ -69,7 +82,6 @@ public class DetailsFragment extends Fragment {
             view.findViewById(R.id.open_in_maps_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO plug in restaurant latitude and longitude
                     openRestaurantLocationInMaps();
                 }
 
