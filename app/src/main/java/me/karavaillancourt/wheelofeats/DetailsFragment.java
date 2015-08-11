@@ -40,7 +40,7 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
-    private void setRestaurantDataInFragment() {
+    public void setRestaurantDataInFragment() {
        // Resturant resturant = makeSelection();
         //TODO: plug in real data
         wheelGifContainer.setVisibility(View.GONE);
@@ -102,11 +102,11 @@ public class DetailsFragment extends Fragment {
     private void showAnimation() {
         resultsView.setVisibility(View.GONE);
         wheelGifContainer.setVisibility(View.VISIBLE);
-        view.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setRestaurantDataInFragment();
-            }
-        }, ANIMATION_DELAY);
+//        view.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                setRestaurantDataInFragment();
+//            }
+//        }, ANIMATION_DELAY);
     }
 }
