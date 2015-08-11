@@ -21,7 +21,7 @@ public class ResturantManager {
     }
 
     public Resturant selectRandom() {
-        int random = (int) (Math.floor(Math.random() * masterList.length) + 1);
+        int random = (int) (Math.floor(Math.random() * masterList.length));
         return masterList[random];
     }
 
