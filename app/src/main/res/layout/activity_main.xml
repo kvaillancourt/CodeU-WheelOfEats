@@ -9,6 +9,13 @@ android:paddingRight="@dimen/activity_horizontal_margin"
 android:paddingTop="@dimen/activity_vertical_margin"
 android:orientation="vertical" tools:context=".MainActivity">
 
+<ImageView
+        android:id="@+id/imageViewMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/main"
+        android:contentDescription="@string/main_image_caption"/>
+
 <TextView android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@string/main_description"/>
