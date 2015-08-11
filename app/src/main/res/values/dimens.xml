@@ -2,4 +2,10 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="results_restaurant_name_text_size">28dp</dimen>
+    <dimen name="results_restaurant_address_text_size">16dp</dimen>
+    <dimen name="results_restaurant_distance_text_size">16dp</dimen>
+    <dimen name="results_text_view_padding">5dp</dimen>
+    <dimen name="results_btn_top_margin">16dp</dimen>
 </resources>
