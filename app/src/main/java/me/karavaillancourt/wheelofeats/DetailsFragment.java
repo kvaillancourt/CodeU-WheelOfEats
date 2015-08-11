@@ -21,7 +21,6 @@ public class DetailsFragment extends Fragment {
     private Resturant restaurant;
     private GIFView wheelGifContainer;
     private LinearLayout resultsView;
-    private Resturant Restaurant;
     public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
     private static final long ANIMATION_DELAY = 5000;
 
@@ -39,7 +38,8 @@ public class DetailsFragment extends Fragment {
         return view;
     }
 
-    public void setRestaurantDataInFragment(final Resturant restaurant) {
+    public void setRestaurantDataInFragment(Resturant restaurant) {
+        this.restaurant = restaurant;
         wheelGifContainer.setVisibility(View.GONE);
         resultsView.setVisibility(View.VISIBLE);
         String mRestaurantName;
@@ -59,8 +59,7 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //TODO plug in restaurant latitude and longitude
-                    final Resturant mRestaurant = restaurant;
-                    openRestaurantLocationInMaps(mRestaurant);
+                    openRestaurantLocationInMaps();
                 }
 
             });
@@ -100,11 +99,8 @@ public class DetailsFragment extends Fragment {
         });
     }
 
-    private void openRestaurantLocationInMaps(Resturant resturant) {
-        String location = resturant.getLatitude() + "," + resturant.getLongitude() + "(" + resturant.getName() + ")";
-        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-                .appendQueryParameter("q", location)
-                .build();
+    private void openRestaurantLocationInMaps() {
+        Uri geoLocation = Uri.parse(String.format("geo:%f,%f?", restaurant.getLatitude(), restaurant.getLongitude()));
         Intent intent = new Intent(Intent.ACTION_VIEW, geoLocation);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             getActivity().startActivity(intent);
