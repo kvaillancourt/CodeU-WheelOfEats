@@ -100,11 +100,12 @@ public class MainActivity extends AppCompatActivity implements
         //Intent intent = new Intent(this, DetailsActivity.class);
 
         Context mContext;
-        //private ResturantManager mManager;
+        ResturantManager mManager = new ResturantManager();
         EditText radiusText = (EditText) findViewById(R.id.radius_distance);
 
         String radius = radiusText.getText().toString();
-        //FetchResturantTask fetchResturantTask = new FetchResturantTask(mContext, mManager, this);
+        FetchResturantTask fetchResturantTask = new FetchResturantTask(mContext, mManager, this).execute();
+        //new FetchResturantTask()
 
         //intent.putExtra("radiusKey", radius);
 
