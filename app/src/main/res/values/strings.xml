@@ -3,7 +3,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
-
     <string name="pref_location_key">Location</string>
     <string name="pref_location_label">location</string>
     <string name="pref_location_default">94043</string>
@@ -11,9 +10,8 @@
     <string name="results_distance_to_restaurant">%1$d miles away</string>
     <string name="spin_again_btn_text">Spin Again</string>
     <string name="start_over_btn_text">Start Over</string>
-    <string name="main_description">Welcome to Wheel of Lunch! Enter your postal code and furthest radius distance you\'re willing to travel to find your perfect lunch spot. more description stuff here</string>
-    <string name="postal_code">Postal Code</string>
-    <string name="radius_distance">Distance</string>
+    <string name="main_description">Welcome to Wheel of Eats! Please enter the furthest radius distance you're willing to travel to find your perfect food spot.</string>
+    <string name="radius_distance">Distance (Miles)</string>
     <string name="submit">Submit</string>
     <string name="no_maps_app_error_dialog_title">Error opening map</string>
     <string name="no_maps_app_error_dialog_text">There was an issue showing the location in maps.  Please ensure you have a maps app installed and try again.</string>
