@@ -76,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction().add(R.id.activity_main, resultsFragment, FragmentResults.RESULTS_FRAGMENT_TAG).commit();
     }
 
-    public String getmLatitudeText() {
-        return mLatitudeText;
-    }
-
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -99,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void submitRequest(View view){
-        Intent intent = new Intent(this, FragmentResults.class);
+        Intent intent = new Intent(this, DetailsActivity.class);
         EditText postalText = (EditText) findViewById(R.id.postal_code);
         EditText radiusText = (EditText) findViewById(R.id.radius_distance);
 

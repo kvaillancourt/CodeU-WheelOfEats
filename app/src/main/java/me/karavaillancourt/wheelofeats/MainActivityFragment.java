@@ -60,16 +60,21 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
-            resturantTask.execute();
-            return true;
-        }
+//        if (id == R.id.action_refresh) {
+//            FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
+//            resturantTask.execute();
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
+//todo: in progress. don't judge
+//    public Resturant makeSelection() {
+//        int random = (int) (Math.floor(Math.random() * (masterList.length - 1 + 1)) + 1);
+//
+//    }
 
 
-    private void updateWeather() {
+    private void updateResturants() {
         FetchResturantTask resturantTask = new FetchResturantTask(getActivity(), mResturantAdapter);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         resturantTask.execute();
@@ -78,7 +83,7 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
     @Override
     public void onStart() {
         super.onStart();
-        updateWeather();
+        //updateResturants();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -235,11 +240,6 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
             SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
             return shortenedDateFormat.format(time);
         }
-
-
-        //Done! future kara, please change this to reflect the data you are recieving from
-        // the google places api instead of the weateher api...
-        // Lesson 2: Json parsing
 
         /**
          * Take the String representing the complete forecast in JSON Format and

@@ -18,4 +18,5 @@
     <string name="no_maps_app_error_dialog_title">Error opening map</string>
     <string name="no_maps_app_error_dialog_text">There was an issue showing the location in maps.  Please ensure you have a maps app installed and try again.</string>
     <string name="ok">OK</string>
+    <string name="title_activity_details">DetailsActivity</string>
 </resources>
