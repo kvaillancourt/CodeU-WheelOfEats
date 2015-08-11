@@ -1,5 +1,6 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,18 +19,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 
+@TargetApi(4)
 public class FetchResturantTask extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = FetchResturantTask.class.getSimpleName();
     private MainActivity mActivity;
     int radius = 5000;
 
-    private ArrayAdapter<String> mResturantAdapter;
     private final Context mContext;
     private ResturantManager mManager;
 
     public FetchResturantTask(Context context, ResturantManager manager, MainActivity activity) {
         mContext = context;
-        //mResturantAdapter = forecastAdapter;
         this.mActivity = activity;
         mManager = manager;
     }
