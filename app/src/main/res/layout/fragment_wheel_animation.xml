@@ -8,7 +8,6 @@
         android:id="@+id/loading_wheel_gif"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
         components:src="@drawable/wheel_animation">
     </me.karavaillancourt.wheelofeats.GIFView>
 
