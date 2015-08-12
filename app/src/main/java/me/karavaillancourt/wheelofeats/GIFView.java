@@ -52,7 +52,7 @@ public class GIFView extends View {
         if (mMovie != null) {
             int relTime = (int) ((now - movieStart) % mMovie.duration());
             mMovie.setTime(relTime);
-            mMovie.draw(canvas, getWidth()/2 - mMovie.width()/2, getHeight()/2 - mMovie.height()/2);
+            mMovie.draw(canvas, getWidth() - mMovie.width(), getHeight() - mMovie.height());
             this.invalidate();
         }
     }

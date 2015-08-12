@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements
 
     String LOG_TAG = MainActivity.class.getSimpleName();
     private ResturantManager mManager;
+    public static final String APIKEY = "AIzaSyB7Eo2EnKGLq7qd71ytgj64GZgMeE1NHeM";
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -58,11 +59,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -113,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void launchFetchResturantTask() {
+        //todo make sure this doens't break anything
         Context context = getApplicationContext();
         EditText radiusText = (EditText) findViewById(R.id.radius_distance);
         String radius = radiusText.getText().toString();
@@ -121,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements
             setRadius();
             FetchResturantTask fetchResturantTask = new FetchResturantTask(this);
             fetchResturantTask.execute();
-
         } else {
             CharSequence text = "Radius input is invalid. Please try again.";
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
@@ -151,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         }, ANIMATION_DELAY);
 
+        // getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).commit();
     }
 
     public void launchDetailFragment() {

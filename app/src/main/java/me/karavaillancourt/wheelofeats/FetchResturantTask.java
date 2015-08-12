@@ -39,6 +39,14 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
 
+        getResturantListJSON();
+        //  getOneResturantJSON();
+        return null;
+    }
+
+    private Void getResturantListJSON() {
+
+
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -50,7 +58,7 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
         Log.v(LOG_TAG, location);
 
         String types = "restaurant";
-        String APIKey = "AIzaSyDMY5l8HtWPiV4CtCmMIZK-NkQDXTa23DY";
+        String APIKey = MainActivity.APIKEY;
 
         try {
             // Construct the URL for the OpenWeatherMap query
@@ -131,6 +139,7 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
         return null;
     }
 
+
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
@@ -144,7 +153,7 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
         // These are the names of the JSON objects that need to be extracted.
         final String OWM_RESULTS = "results";
         final String OWM_NAME = "name";
-        final String OWM_ID = "id";
+        final String OWM_PLACE_ID = "place_id";
         final String OWM_lat = "lat";
         final String OWM_long = "lng";
         final String OWM_geometry = "geometry";
@@ -166,7 +175,7 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
             JSONObject resturantJSON = placeArray.getJSONObject(i);
 
             name = resturantJSON.getString(OWM_NAME);
-            id = resturantJSON.getString(OWM_ID);
+            id = resturantJSON.getString(OWM_PLACE_ID);
             icon = resturantJSON.getString(OWM_icon);
 
 
@@ -175,19 +184,21 @@ public class FetchResturantTask extends AsyncTask<String, Void, Void> {
             latitude = location.getDouble(OWM_lat);
             longitude = location.getDouble(OWM_long);
 
+
             Resturant resturant = new Resturant(name, id, latitude, longitude, icon);
 
             resultStrs[i] = resturant; //+ "-" + id;
 
-            mManager.setMasterList(resultStrs);
-
         }
 
         for (Resturant resturant : resultStrs) {
+            //getOneResturantJSON(resturant);
+
             Log.v(LOG_TAG, resturant.getName() + " " + resturant.getId() + " "
                     + resturant.getLatitude() + " " + resturant.getLongitude() + " "
                     + resturant.getIcon());
         }
+
         mManager.setMasterList(resultStrs);
 
     }

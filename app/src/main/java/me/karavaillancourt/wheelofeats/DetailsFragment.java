@@ -1,11 +1,14 @@
 package me.karavaillancourt.wheelofeats;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.MediaRouteButton;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,16 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -36,67 +30,86 @@ public class DetailsFragment extends Fragment {
     private LinearLayout resultsView;
     public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
     private MainActivity mainActivity;
-
+    private MediaRouteButton wheelGifContainer;
 
 
     public DetailsFragment() {
-        setRestaurantDataInFragment();
+        DetailTask task = new DetailTask(this);
+        task.execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_details, container, false);
         resultsView = (LinearLayout) view.findViewById(R.id.results_view);
         return view;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void setRestaurantDataInFragment() {
         String mRestaurantName;
         restaurant = new Resturant("Ruby's Taqueria", "xxx", 37.397874, -122.023639, "xxx");
         String mRestaurantAddress = "832 Borregas Ave";
         String mRestaurantDistance = "1.3 miles";
         if (restaurant != null && view != null) {
-            view.findViewById(R.id.open_in_maps_btn).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.spin_again_btn).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.spin_again_btn_text).setVisibility(View.VISIBLE);
+            // Resturant resturant = makeSelection();
+            MainActivity activity = ((MainActivity) getActivity());
+            ResturantManager manager = activity.getManager();
+            restaurant = manager.selectRandom();
+
+            //***********
+            //NOTE!!!!!!!! for whatever reason when I uncomment the line below, the app crashes.
+//            wheelGifContainer.setVisibility(View.GONE);
+            //***************************
+            resultsView.setVisibility(View.VISIBLE);
+            // mRestaurantAddress = restaurant.getAddress();
+            mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
             mRestaurantName = restaurant.getName();
-            try {
-                URL url = new URL(restaurant.getIcon());
-                view.findViewById(R.id.restaurant_img).setVisibility(View.VISIBLE);
-                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                ((ImageView) view.findViewById(R.id.restaurant_img)).setImageBitmap(bmp);
-            } catch (Exception ex) {
-                view.findViewById(R.id.restaurant_img).setVisibility(View.GONE);
-                ex.printStackTrace();
+
+            if (restaurant != null) {
+                view.findViewById(R.id.open_in_maps_btn).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.spin_again_btn).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.spin_again_btn_text).setVisibility(View.VISIBLE);
+                try {
+                    URL url = new URL(restaurant.getIcon());
+                    view.findViewById(R.id.restaurant_img).setVisibility(View.VISIBLE);
+                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    ((ImageView) view.findViewById(R.id.restaurant_img)).setImageBitmap(bmp);
+                } catch (Exception ex) {
+                    view.findViewById(R.id.restaurant_img).setVisibility(View.GONE);
+                    ex.printStackTrace();
+                }
+                //String mRestaurantAddress = restaurant.getAddress();
+                //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
+
+                ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
+                // ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
+                ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
+                // ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
+                // ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
+
+                view.findViewById(R.id.open_in_maps_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openRestaurantLocationInMaps();
+                    }
+
+                });
+                view.findViewById(R.id.spin_again_btn).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity) getActivity()).addRestaurantDataToFragment();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+
+                });
             }
-            //String mRestaurantAddress = restaurant.getAddress();
-            //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
-
-            ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
-            ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
-            ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
-            // ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
-            // ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
-
-            view.findViewById(R.id.open_in_maps_btn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openRestaurantLocationInMaps();
-                }
-
-            });
-            view.findViewById(R.id.spin_again_btn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity)getActivity()).addRestaurantDataToFragment();
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
-
-            });
         }
     }
+
 
     private void openRestaurantLocationInMaps() {
         Uri geoLocation = Uri.parse(String.format("geo:%f,%f?", restaurant.getLatitude(), restaurant.getLongitude()));

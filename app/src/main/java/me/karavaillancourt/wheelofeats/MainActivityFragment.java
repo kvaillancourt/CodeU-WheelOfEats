@@ -1,25 +1,21 @@
 package me.karavaillancourt.wheelofeats;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment { //implements ConnectionCallbacks, OnConnectionFailedListener {
+public class MainActivityFragment extends Fragment {
 
-    private ArrayAdapter<String> mResturantAdapter;
-    public final static String MAIN_FRAGMENT_TAG = "MAIN";
-    //    private Resturant[] masterList;
+    public static final String MAIN_FRAGMENT_TAG = "MAIN";
 
     public MainActivityFragment() {
     }
@@ -38,32 +34,30 @@ public class MainActivityFragment extends Fragment { //implements ConnectionCall
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            FetchResturantTask resturantTask = new FetchResturantTask((MainActivity) getActivity());
-            resturantTask.execute();
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private void updateResturants() {
-        FetchResturantTask resturantTask = new FetchResturantTask((MainActivity) getActivity());
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        resturantTask.execute();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        //updateResturants();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        view.findViewById(R.id.radius_distance).setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    ((MainActivity) getActivity()).launchFetchResturantTask(); //do what you want
+                }
+                return false;
+            }
+        });
         view.findViewById(R.id.submit_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
