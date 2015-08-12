@@ -33,20 +33,14 @@ public class DetailsFragment extends Fragment {
 
     private View view;
     private Resturant restaurant;
-    private GIFView wheelGifContainer;
     private LinearLayout resultsView;
     public static final String DETAILS_FRAGMENT_TAG = "DETAILS";
-    private static final long ANIMATION_DELAY = 5000;
     private MainActivity mainActivity;
 
 
 
     public DetailsFragment() {
-        //mainActivity = activity;
-    }
-
-    public void setMainActivity(MainActivity activity){
-        mainActivity = activity;
+        setRestaurantDataInFragment();
     }
 
     @Override
@@ -54,30 +48,37 @@ public class DetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_details, container, false);
         resultsView = (LinearLayout) view.findViewById(R.id.results_view);
-        wheelGifContainer = (GIFView) view.findViewById(R.id.loading_wheel_gif);
-        showAnimation();
         return view;
     }
 
     public void setRestaurantDataInFragment() {
-        wheelGifContainer.setVisibility(View.GONE);
-        resultsView.setVisibility(View.VISIBLE);
         String mRestaurantName;
-        if (restaurant != null) {
+        restaurant = new Resturant("Ruby's Taqueria", "xxx", 37.397874, -122.023639, "xxx");
+        String mRestaurantAddress = "832 Borregas Ave";
+        String mRestaurantDistance = "1.3 miles";
+        if (restaurant != null && view != null) {
             view.findViewById(R.id.open_in_maps_btn).setVisibility(View.VISIBLE);
             view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.spin_again_btn).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.spin_again_btn_text).setVisibility(View.VISIBLE);
             mRestaurantName = restaurant.getName();
             try {
                 URL url = new URL(restaurant.getIcon());
+                view.findViewById(R.id.restaurant_img).setVisibility(View.VISIBLE);
                 Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 ((ImageView) view.findViewById(R.id.restaurant_img)).setImageBitmap(bmp);
             } catch (Exception ex) {
                 view.findViewById(R.id.restaurant_img).setVisibility(View.GONE);
+                ex.printStackTrace();
             }
             //String mRestaurantAddress = restaurant.getAddress();
             //String mRestaurantDistance = String.format(getResources().getString(R.string.results_distance_to_restaurant), 5);
-            //((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
-            //((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
+
+            ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
+            ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
+            ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
+            // ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
+            // ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
 
             view.findViewById(R.id.open_in_maps_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,40 +87,15 @@ public class DetailsFragment extends Fragment {
                 }
 
             });
-
             view.findViewById(R.id.spin_again_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showAnimation();
                     ((MainActivity)getActivity()).addRestaurantDataToFragment();
+                    getActivity().getSupportFragmentManager().popBackStack();
                 }
+
             });
-        } else {
-            mRestaurantName = getActivity().getResources().getString(R.string.no_restaurants_found);
-            view.findViewById(R.id.open_in_maps_btn).setVisibility(View.GONE);
-            view.findViewById(R.id.open_in_maps_btn_text).setVisibility(View.GONE);
         }
-        ((TextView) view.findViewById(R.id.restaurant_name)).setText(mRestaurantName);
-        // ((TextView) view.findViewById(R.id.restaurant_address)).setText(mRestaurantAddress);
-        // ((TextView) view.findViewById(R.id.restaurant_distance)).setText(mRestaurantDistance);
-
-        view.findViewById(R.id.open_in_maps_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO plug in restaurant latitude and longitude
-                openRestaurantLocationInMaps();
-            }
-
-        });
-
-        view.findViewById(R.id.spin_again_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAnimation();
-                setRestaurantDataInFragment();
-            }
-
-        });
     }
 
     private void openRestaurantLocationInMaps() {
@@ -140,17 +116,6 @@ public class DetailsFragment extends Fragment {
                     }).create();
 
         }
-    }
-
-    private void showAnimation() {
-        resultsView.setVisibility(View.GONE);
-        wheelGifContainer.setVisibility(View.VISIBLE);
-        view.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setRestaurantDataInFragment();
-            }
-        }, ANIMATION_DELAY);
     }
 
     public void setRestaurant(Resturant restaurant) {

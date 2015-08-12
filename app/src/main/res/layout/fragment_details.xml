@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:components="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -10,7 +9,6 @@
     tools:context="me.karavaillancourt.wheelofeats.DetailsFragment">
 
     <LinearLayout
-        android:visibility="visible"
         android:id="@+id/results_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,24 +17,23 @@
 
         <ImageView
             android:id="@+id/restaurant_img"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_redo_black_24dp"
             android:scaleType="centerInside"
             android:layout_weight="8"/>
 
         <TextView
             android:id="@+id/restaurant_name"
-            android:text="NAME"
+            android:text="@string/no_restaurants_found"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|bottom"
             android:textSize="@dimen/results_restaurant_name_text_size"
             android:textStyle="bold"
-            android:layout_weight="6" />
+            android:layout_weight="4" />
 
         <TextView
-            android:text="123 Address"
             android:id="@+id/restaurant_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +42,6 @@
             android:textSize="@dimen/results_restaurant_address_text_size" />
 
         <TextView
-            android:text="5 miles"
             android:id="@+id/restaurant_distance"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -54,6 +50,7 @@
             android:textSize="@dimen/results_restaurant_distance_text_size" />
 
         <ImageButton
+            android:visibility="gone"
             android:id="@+id/open_in_maps_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,6 +58,7 @@
             android:src="@drawable/ic_place_black_24dp" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/open_in_maps_btn_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,6 +66,7 @@
             android:textStyle="bold" />
 
         <ImageButton
+            android:visibility="gone"
             android:id="@+id/spin_again_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,24 +74,12 @@
             android:src="@drawable/ic_redo_black_24dp" />
 
         <TextView
+            android:visibility="gone"
+            android:id="@+id/spin_again_btn_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/spin_again_btn_text"
             android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
-
-        <me.karavaillancourt.wheelofeats.GIFView
-            android:id="@+id/loading_wheel_gif"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            components:src="@drawable/wheel_animation">
-        </me.karavaillancourt.wheelofeats.GIFView>
     </LinearLayout>
 
 </RelativeLayout>

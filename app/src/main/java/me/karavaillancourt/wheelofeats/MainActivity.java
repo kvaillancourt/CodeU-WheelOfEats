@@ -3,6 +3,8 @@ package me.karavaillancourt.wheelofeats;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements
     public String mLongitudeText = "-117.217262";
     private ResturantManager manager;
     private int radius;
+    private Handler mHandler;
+    private DetailsFragment mDetailsFragment;
+    private int ANIMATION_DELAY = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,12 @@ public class MainActivity extends AppCompatActivity implements
         buildGoogleApiClient();
         mGoogleApiClient.connect();
         manager = new ResturantManager();
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                launchDetailFragment();
+            }
+        };
 
     }
 
@@ -80,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
         DetailsFragment detailsFragment = (DetailsFragment) getSupportFragmentManager().findFragmentByTag(DetailsFragment.DETAILS_FRAGMENT_TAG);
         outState.putInt("RADIUS", radius);
-        if (detailsFragment != null) {
+        if (detailsFragment != null && detailsFragment.getRestaurant() != null) {
             Resturant selectedRestaurant = detailsFragment.getRestaurant();
             outState.putString("NAME", selectedRestaurant.getName());
             outState.putString("ID", selectedRestaurant.getId());
@@ -110,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements
             setRadius();
             FetchResturantTask fetchResturantTask = new FetchResturantTask(this);
             fetchResturantTask.execute();
+
         } else {
             CharSequence text = "Radius input is invalid. Please try again.";
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
@@ -125,9 +137,31 @@ public class MainActivity extends AppCompatActivity implements
         radius = radiusMilesInt * 1609;
     }
 
-    public void launchDetailFragment() {
+    public void launchAnimationFragment() {
         launchFetchResturantTask();
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new DetailsFragment(), DetailsFragment.DETAILS_FRAGMENT_TAG).addToBackStack(MainActivityFragment.MAIN_FRAGMENT_TAG).commit();
+        mDetailsFragment = new DetailsFragment();
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top)
+                .replace(R.id.activity_main, new WheelAnimationFragment(), WheelAnimationFragment.ANIMATION_FRAGMENT_TAG)
+                .addToBackStack(MainActivityFragment.MAIN_FRAGMENT_TAG).commit();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                launchDetailFragment();
+            }
+        }, ANIMATION_DELAY);
+
+    }
+
+    public void launchDetailFragment() {
+        if (mDetailsFragment == null) {
+            mDetailsFragment = new DetailsFragment();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.abc_slide_in_bottom, R.anim.abc_slide_out_top)
+                .replace(R.id.activity_main, mDetailsFragment, DetailsFragment.DETAILS_FRAGMENT_TAG)
+                .addToBackStack(WheelAnimationFragment.ANIMATION_FRAGMENT_TAG).commit();
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -166,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements
                 .findFragmentByTag(DetailsFragment.DETAILS_FRAGMENT_TAG);
         if (detailsFragment != null) {
             detailsFragment.setRestaurant(manager.selectRandom());
+            detailsFragment.setRestaurantDataInFragment();
         }
     }
 

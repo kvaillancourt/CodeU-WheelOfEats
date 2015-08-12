@@ -22,7 +22,11 @@ public class ResturantManager {
 
     public Resturant selectRandom() {
         int random = (int) (Math.floor(Math.random() * masterList.length));
-        return masterList[random];
+        if (masterList.length > 0) {
+            return masterList[random];
+        } else {
+            return null;
+        }
     }
 
 }
