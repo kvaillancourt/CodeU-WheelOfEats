@@ -129,17 +129,17 @@ public class DetailsFragment extends Fragment {
         return restaurant;
     }
 
-    public void save(View view) throws FileNotFoundException, UnsupportedEncodingException {
-        Resturant current = getRestaurant();
-        BufferedWriter infoWriter = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(getActivity().getFilesDir().toString() + "/saved_restaurants.txt"), "UTF-8"));
-        try {
-            infoWriter.write(current.getName() + "\n");
-            // infoWriter.write(current ADDRESS
-
-            infoWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void save(View view) throws FileNotFoundException, UnsupportedEncodingException {
+//        Resturant current = getRestaurant();
+//        BufferedWriter infoWriter = new BufferedWriter(new OutputStreamWriter(
+//                new FileOutputStream(getActivity().getFilesDir().toString() + "/saved_restaurants.txt"), "UTF-8"));
+//        try {
+//            infoWriter.write(current.getName() + "\n");
+//            // infoWriter.write(current ADDRESS
+//
+//            infoWriter.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
